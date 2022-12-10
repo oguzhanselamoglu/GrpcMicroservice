@@ -1,0 +1,31 @@
+﻿<Properties StartupConfiguration="{CE53C6B4-710D-4C88-B218-46C934A58B23}|http">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.ProductGrpc PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ProductGrpc/Program.cs">
+    <Files>
+      <File FileName="ProductGrpc/Program.cs" Line="31" Column="1" />
+      <File FileName="ProductGrpc/Protos/greet.proto" Line="1" Column="1" />
+      <File FileName="ProductGrpc/Models/Product.cs" Line="4" Column="22" />
+      <File FileName="ProductGrpc/Data/ProductContext.cs" Line="2" Column="26" />
+      <File FileName="ProductGrpc/Data/ProductsContextSeed.cs" Line="45" Column="27" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="GrpcMicroservice" expanded="True" selected="True">
+            <Node name="ProductGrpc" expanded="True">
+              <Node name="Data" expanded="True" />
+              <Node name="Models" expanded="True" />
+              <Node name="Protos" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>
