@@ -1,7 +1,9 @@
 ﻿using System;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
 using ProductGrpc.Data;
+using ProductGrpc.Models;
 using ProductGrpc.Protos;
 
 namespace ProductGrpc.Services
@@ -34,11 +36,33 @@ namespace ProductGrpc.Services
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                CreatedTime = Timestamp.FromDateTime(product.CreatedTime),
-                Status = ProductStatus.Instock
+                Status = Protos.ProductStatus.Instock,
+               // CreatedTime = Timestamp.FromDateTime(product.CreatedTime)
+                
             };
             return productModel;
            
+        }
+        public override async Task GetAllProducts(GetAllProductsRequest request, IServerStreamWriter<ProductModel> responseStream, ServerCallContext context)
+        {
+            var products = await _context.Products.ToListAsync();
+            foreach (var product in products)
+            {
+                var productModel = new ProductModel
+                {
+                    ProductId = product.ProductId,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Status = Protos.ProductStatus.Instock,
+                    // CreatedTime = Timestamp.FromDateTime(product.CreatedTime)
+
+                };
+                await responseStream.WriteAsync(productModel);
+            }
+           
+        
+            
         }
     }
 }
