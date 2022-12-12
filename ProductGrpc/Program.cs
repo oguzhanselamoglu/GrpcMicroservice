@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ProductContext>(options => options.UseInMemoryDatabase("ProductApp"));
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddGrpc();
 
 var app = builder.Build();
