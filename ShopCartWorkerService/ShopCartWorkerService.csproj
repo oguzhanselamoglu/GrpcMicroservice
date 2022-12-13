@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-ShopCartWorkerService-C09C5269-66F6-4409-8D75-D4DB102A2AC2</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.51.0">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Google.Protobuf" Version="3.21.11" />
+        <PackageReference Include="Grpc.Net.ClientFactory" Version="2.50.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Grpc.Tools" />
+      <None Remove="Google.Protobuf" />
+      <None Remove="Grpc.Net.ClientFactory" />
+    </ItemGroup>
+    <ItemGroup>
+      <Protobuf Include="..\ShoppingCartGrpc\Protos\shoppingcart.proto" GrpcServices="Client">
+        <Link>Protos\shoppingcart.proto</Link>
+      </Protobuf>
+      <Protobuf Include="..\ProductGrpc\Protos\product.proto" GrpcServices="Client">
+        <Link>Protos\product.proto</Link>
+      </Protobuf>
+    </ItemGroup>
+</Project>
