@@ -61,6 +61,7 @@ namespace ProductGrpc.Services
             var productModel = _mapper.Map<ProductModel>(product);
             return productModel;
         }
+
         public override async Task<ProductModel> UpdateProduct(UpdateProductRequest request, ServerCallContext context)
         {
             var product = _mapper.Map<Product>(request.Product);
@@ -68,7 +69,7 @@ namespace ProductGrpc.Services
             if (!isExist)
             {
                 //throw exception
-                throw new RpcException(new Status(StatusCode.NotFound, $"Product with ID = {request.ProductId} is not found"));
+                throw new RpcException(new Status(StatusCode.NotFound, $"Product with ID = {request.Product.ProductId} is not found"));
             }
 
             _context.Entry(product).State = EntityState.Modified;
@@ -84,6 +85,7 @@ namespace ProductGrpc.Services
             return productModel;
 
         }
+
         public override async Task<DeleteProductResponse> DeleteProduct(DeleteProductRequest request, ServerCallContext context)
         {
             var product = await _context.Products.FindAsync(request.ProductId);
@@ -101,9 +103,22 @@ namespace ProductGrpc.Services
             return response;
 
         }
-        public override Task<InsertBulkProductResponse> InsertBulkProduct(IAsyncStreamReader<ProductModel> requestStream, ServerCallContext context)
+
+        public override async Task<InsertBulkProductResponse> InsertBulkProduct(IAsyncStreamReader<ProductModel> requestStream, ServerCallContext context)
         {
-            return base.InsertBulkProduct(requestStream, context);
+            while (await requestStream.MoveNext())
+            {
+                var product = _mapper.Map<Product>(requestStream.Current);
+                _context.Products.Add(product);
+            }
+
+            var insertCount = await _context.SaveChangesAsync();
+            var response = new InsertBulkProductResponse
+            {
+                Succes = insertCount > 0,
+                InsertCount = insertCount
+            };
+            return response;
         }
     }
 }

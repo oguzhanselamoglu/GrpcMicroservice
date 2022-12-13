@@ -11,6 +11,10 @@ var client = new ProductProtoService.ProductProtoServiceClient(channel);
 await GetProductAsync(client);
 await GetAllProductAsync(client);
 await AddProductAsync(client);
+await UpdateProductAsync(client);
+await DeleteProductAsync(client);
+await InsertBulkProductAsync(client);
+await GetAllProductAsync(client);
 
 async Task AddProductAsync(ProductProtoService.ProductProtoServiceClient client)
 {
@@ -59,7 +63,59 @@ async Task GetAllProductAsync(ProductProtoService.ProductProtoServiceClient clie
     }
 
 }
+async Task UpdateProductAsync(ProductProtoService.ProductProtoServiceClient client)
+{
+    Console.WriteLine("UpdateProductAsync started..");
+    var updateProductResponse = await client.UpdateProductAsync(new UpdateProductRequest
+    {
+        Product = new ProductModel
+        {
+            ProductId=1,
+            Name = "ASD",
+            Description = "New ASD Product",
+            Price = 200,
+            Status = ProductStatus.Instock,
+            CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow)
+        }
+    });
 
+    Console.WriteLine($"UpdateProductAsync Response :{updateProductResponse.ToString()}");
+
+}
+async Task DeleteProductAsync(ProductProtoService.ProductProtoServiceClient client)
+{
+    Console.WriteLine("DeleteProductAsync started..");
+    var deleteResponse = await client.DeleteProductAsync(new DeleteProductRequest
+    {
+        ProductId=2
+    });
+
+    Console.WriteLine($"DeleteProductAsync Response :{deleteResponse.ToString()}");
+
+}
+async Task InsertBulkProductAsync(ProductProtoService.ProductProtoServiceClient client)
+{
+    Console.WriteLine("InsertBulkProductAsync started..");
+    using var clientBulk = client.InsertBulkProduct();
+    for (int i = 0; i < 3; i++)
+    {
+        var productModel = new ProductModel
+        {
+            Name = $"Product{i}",
+            Price = 400,
+            Status = ProductStatus.Instock,
+            Description = "Bulk insertyed",
+            CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow)
+
+        };
+        await clientBulk.RequestStream.WriteAsync(productModel);
+    }
+    await clientBulk.RequestStream.CompleteAsync();
+    var responseBulk = await clientBulk;
+
+    Console.WriteLine($"Status: {responseBulk.Succes}. Insert Count: { responseBulk.InsertCount}");
+
+}
 Console.ReadKey();
 
 
