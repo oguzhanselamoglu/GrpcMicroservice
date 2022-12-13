@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Net.Client;
 using ProductGrpc.Protos;
@@ -9,11 +10,25 @@ using var channel = GrpcChannel.ForAddress("http://localhost:5286");
 var client = new ProductProtoService.ProductProtoServiceClient(channel);
 await GetProductAsync(client);
 await GetAllProductAsync(client);
+await AddProductAsync(client);
 
+async Task AddProductAsync(ProductProtoService.ProductProtoServiceClient client)
+{
+    Console.WriteLine("AddProductAsync started..");
+    var addProductResponse = await client.AddProductAsync(new AddProductRequest
+    {
+        Product = new ProductModel
+        {
+            Name = "ASD",
+            Description = "New ASD Product",
+            Price = 200,
+            Status = ProductStatus.Instock,
+            CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow)
+        }
+    });
+    Console.WriteLine($"AddProductAsync Response :{addProductResponse.ToString()}");
 
-
-
-
+}
 
 async Task GetProductAsync(ProductProtoService.ProductProtoServiceClient client)
 {
