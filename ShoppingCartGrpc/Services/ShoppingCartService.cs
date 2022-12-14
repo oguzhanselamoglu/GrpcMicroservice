@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCartGrpc.Data;
 using ShoppingCartGrpc.Models;
@@ -8,6 +9,7 @@ using ShoppingCartGrpc.Protos;
 
 namespace ShoppingCartGrpc.Services
 {
+  
 	public class ShoppingCartService: ShoppingCartProtoService.ShoppingCartProtoServiceBase
 	{
         private readonly ShoppingCartContext _shoppingCartDbContext;

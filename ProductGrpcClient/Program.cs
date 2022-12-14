@@ -6,7 +6,7 @@ using ProductGrpc.Protos;
 
 Console.WriteLine("Hello, World!");
 Thread.Sleep(2000);
-using var channel = GrpcChannel.ForAddress("http://localhost:5286");
+using var channel = GrpcChannel.ForAddress("https://localhost:7001");
 var client = new ProductProtoService.ProductProtoServiceClient(channel);
 await GetProductAsync(client);
 await GetAllProductAsync(client);

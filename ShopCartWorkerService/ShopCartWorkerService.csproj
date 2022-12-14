@@ -15,11 +15,13 @@
         </PackageReference>
         <PackageReference Include="Google.Protobuf" Version="3.21.11" />
         <PackageReference Include="Grpc.Net.ClientFactory" Version="2.50.0" />
+        <PackageReference Include="IdentityModel" Version="6.0.0" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Grpc.Tools" />
       <None Remove="Google.Protobuf" />
       <None Remove="Grpc.Net.ClientFactory" />
+      <None Remove="IdentityModel" />
     </ItemGroup>
     <ItemGroup>
       <Protobuf Include="..\ShoppingCartGrpc\Protos\shoppingcart.proto" GrpcServices="Client">

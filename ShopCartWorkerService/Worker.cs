@@ -1,5 +1,6 @@
 using Grpc.Core;
 using Grpc.Net.Client;
+using IdentityModel.Client;
 using ProductGrpc.Protos;
 using ShoppingCartGrpc.Protos;
 
@@ -34,7 +35,7 @@ public class Worker : BackgroundService
             using var scChannel = GrpcChannel.ForAddress(_config.GetValue<string>("WorkerService:ShoppingCartServerUrl"));
             var scClient = new ShoppingCartProtoService.ShoppingCartProtoServiceClient(scChannel);
 
-            var scModel = await GetOrCreateShoppingCartAsync(scClient, token);
+            var scModel = await GetOrCreateShoppingCartAsync(scClient, "");
 
             //// open sc client stream
             using var scClientStream = scClient.AddItemIntoShoppingCart();
@@ -81,35 +82,35 @@ public class Worker : BackgroundService
         _logger.LogInformation("GetTokenFromIS4 Started..");
 
         // discover endpoints from metadata
-        //var client = new HttpClient();
-        //var disco = await client.GetDiscoveryDocumentAsync(_config.GetValue<string>("WorkerService:IdentityServerUrl"));
-        //if (disco.IsError)
-        //{
-        //    _logger.LogError(disco.Error);
-        //    return string.Empty;
-        //}
+        var client = new HttpClient();
+        var disco = await client.GetDiscoveryDocumentAsync(_config.GetValue<string>("WorkerService:IdentityServerUrl"));
+        if (disco.IsError)
+        {
+            _logger.LogError(disco.Error);
+            return string.Empty;
+        }
 
-        //_logger.LogInformation("Discovery endpoint taken from IS4 metadata. Discovery : {disco}", disco.TokenEndpoint);
+        _logger.LogInformation("Discovery endpoint taken from IS4 metadata. Discovery : {disco}", disco.TokenEndpoint);
 
-        //// request token
-        //var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-        //{
-        //    Address = disco.TokenEndpoint,
+        // request token
+        var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+        {
+            Address = disco.TokenEndpoint,
 
-        //    ClientId = "ShoppingCartClient",
-        //    ClientSecret = "secret",
-        //    Scope = "ShoppingCartAPI"
-        //});
+            ClientId = "ShoppingCartClient",
+            ClientSecret = "secret",
+            Scope = "ShoppingCartAPI"
+        });
 
-        //if (tokenResponse.IsError)
-        //{
-        //    _logger.LogError(tokenResponse.Error);
-        //    return string.Empty;
-        //}
+        if (tokenResponse.IsError)
+        {
+            _logger.LogError(tokenResponse.Error);
+            return string.Empty;
+        }
 
-//        _logger.LogInformation("Token retrieved for IS4. Token : {token}", tokenResponse.AccessToken);
+        _logger.LogInformation("Token retrieved for IS4. Token : {token}", tokenResponse.AccessToken);
 
-        return ""; // tokenResponse.AccessToken;
+        return  tokenResponse.AccessToken;
     }
 
     private async Task<ShoppingCartModel> GetOrCreateShoppingCartAsync(ShoppingCartProtoService.ShoppingCartProtoServiceClient scClient, string token)

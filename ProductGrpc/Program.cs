@@ -1,9 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using ProductGrpc.Data;
 using ProductGrpc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// builder.WebHost.ConfigureKestrel(options =>
+// {
+//     // Setup a HTTP/2 endpoint without TLS.
+//     options.ListenLocalhost(7001, o => o.Protocols =
+//         HttpProtocols.Http2);
+// });
+// builder.WebHost.UseUrls();
 // Additional configuration is required to successfully run gRPC on macOS.
 // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
 

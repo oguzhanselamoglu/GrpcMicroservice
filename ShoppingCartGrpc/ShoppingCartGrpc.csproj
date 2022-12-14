@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="Protos\shoppingcart.proto" GrpcServices="Server" />
@@ -37,5 +38,8 @@
     <Folder Include="Protos\" />
     <Folder Include="Services\" />
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
   </ItemGroup>
 </Project>
